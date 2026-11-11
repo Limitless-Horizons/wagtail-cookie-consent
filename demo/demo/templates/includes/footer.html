@@ -1,0 +1,10 @@
+{% load static wagtail_cookie_consent %}
+
+<footer class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <p class="footer__text">Wagtail demo site</p>
+            <p>{% cookie_settings_link class="btn btn-link footer__cookies" %}</p>
+        </div>
+    </div>
+</footer>

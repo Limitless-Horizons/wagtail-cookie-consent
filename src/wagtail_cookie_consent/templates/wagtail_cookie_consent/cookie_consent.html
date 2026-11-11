@@ -1,0 +1,4 @@
+{% load static %}{% if config %}{{ config|json_script:"wagtail-cookie-consent-config" }}
+<link rel="stylesheet" href="{% static 'wagtail_cookie_consent/vendor/cookieconsent.css' %}">
+<script src="{% static 'wagtail_cookie_consent/js/cookie-consent.js' %}"></script>
+<script src="{% static 'wagtail_cookie_consent/vendor/cookieconsent.umd.js' %}" defer></script>{% endif %}
