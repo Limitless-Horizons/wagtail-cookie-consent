@@ -21,9 +21,19 @@ It doesn't block or load other scripts for you, and it doesn't delete cookies an
 - The banner is kept out of preview views automatically (non-configurable).
 - Settings available under Settings → Cookie consent, per the table below.
 
+The banner on a visitor's first visit, here with a site's own [colors](#colors):
+
+![The cookie banner in the corner of a page, with Accept all, Necessary only and Customize buttons and a Privacy notice link](https://raw.githubusercontent.com/Limitless-Horizons/wagtail-cookie-consent/main/docs/images/banner.jpg)
+
+The choices that **Customize** and the **Cookie settings** link open:
+
+![The Cookie settings dialog, with a switch for each category and Accept all, Necessary only and Save my choices buttons](https://raw.githubusercontent.com/Limitless-Horizons/wagtail-cookie-consent/main/docs/images/preferences.jpg)
+
 ## Settings reference
 
 Each site has its own settings, under **Settings → Cookie consent**.
+
+![The Cookie consent settings in the Wagtail admin: who sees the banner, the categories shown and the start of the wording](https://raw.githubusercontent.com/Limitless-Horizons/wagtail-cookie-consent/main/docs/images/admin-settings.jpg)
 
 | Setting | Default | What it does |
 |---|---|---|

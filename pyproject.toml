@@ -1,6 +1,6 @@
 [project]
 name = "wagtail-cookie-consent"
-version = "0.1.0"
+version = "0.1.1"
 description = "A cookie consent banner for Wagtail, set up in the Wagtail admin."
 readme = "README.md"
 license = "BSD-3-Clause"
