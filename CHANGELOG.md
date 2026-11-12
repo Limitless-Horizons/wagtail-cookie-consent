@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-12
+
+### Changed
+
+- README: screenshots of the banner, the visitor's choices and the settings in the Wagtail admin.
+
 ## [0.1.0] - 2026-11-11
 
 ### Added
@@ -21,5 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `WAGTAIL_COOKIE_CONSENT_HIDE_FROM_BOTS`, a Django setting for showing the banner in browser tests.
 - Support for Wagtail 7.4, 8.0 and 8.1.
 
-[Unreleased]: https://github.com/Limitless-Horizons/wagtail-cookie-consent/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Limitless-Horizons/wagtail-cookie-consent/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Limitless-Horizons/wagtail-cookie-consent/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Limitless-Horizons/wagtail-cookie-consent/releases/tag/v0.1.0
