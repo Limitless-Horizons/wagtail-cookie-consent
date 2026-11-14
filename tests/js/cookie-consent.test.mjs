@@ -66,9 +66,27 @@ function page(config, { cookie, library = 'early' } = {}) {
 
   const addLibrary = () => {
     window.runs = [];
-    window.CookieConsent = { run: (options) => window.runs.push(options) };
+    window.accepted = [];
+    window.hidden = 0;
+    window.CookieConsent = {
+      run: (options) => {
+        window.runs.push(options);
+        return Promise.resolve();
+      },
+      acceptCategory: (categories) => window.accepted.push([...categories]),
+      hide: () => {
+        window.hidden += 1;
+      },
+    };
   };
   if (library === 'early') addLibrary();
+  // As in <head>, where the script runs while the page is still loading.
+  if (library === 'late') {
+    Object.defineProperty(window.document, 'readyState', {
+      value: 'loading',
+      configurable: true,
+    });
+  }
   window.eval(SCRIPT);
   if (library === 'late') {
     window.announcedBeforeLibrary = [...window.announced];
@@ -217,6 +235,52 @@ test('wording and links are escaped, since the library writes them as HTML', () 
     consentModal.footer,
     '<a href="/p/&quot;&gt;&lt;script&gt;x&lt;/script&gt;">&lt;b&gt;Privacy&lt;/b&gt;</a>',
   );
+});
+
+test('without the config, there is no script interface', () => {
+  const window = page(null);
+  assert.equal(window.wagtailCookieConsent, undefined);
+});
+
+test('categories lists what the site shows', () => {
+  const window = page({ ...CONFIG, categories: ['analytics'] });
+  assert.deepEqual([...window.wagtailCookieConsent.categories], ['analytics']);
+});
+
+test('get() is null before a choice, and the stored choice after', () => {
+  assert.equal(page(CONFIG).wagtailCookieConsent.get(), null);
+  const window = page(CONFIG, { cookie: stored(['necessary', 'analytics']) });
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(window.wagtailCookieConsent.get())),
+    {
+      analytics: true,
+      marketing: false,
+    },
+  );
+  const outdated = page(CONFIG, { cookie: stored(['analytics'], 1) });
+  assert.equal(outdated.wagtailCookieConsent.get(), null);
+});
+
+test('set() stores the choice through the banner library and closes the banner', async () => {
+  const window = page(CONFIG);
+  await window.wagtailCookieConsent.set({ analytics: true, marketing: false });
+  await window.wagtailCookieConsent.set({ marketing: true, other: true });
+  await window.wagtailCookieConsent.set(null);
+  assert.deepEqual(window.accepted, [['analytics'], ['marketing'], []]);
+  assert.equal(window.hidden, 3);
+});
+
+test('set() waits for a banner library that loads later', async () => {
+  const window = page(CONFIG, { library: 'late' });
+  await window.wagtailCookieConsent.set({ analytics: true });
+  assert.deepEqual(window.accepted, [['analytics']]);
+});
+
+test('hideBanner() closes the banner without a choice', async () => {
+  const window = page(CONFIG);
+  await window.wagtailCookieConsent.hideBanner();
+  assert.deepEqual(window.accepted, []);
+  assert.equal(window.hidden, 1);
 });
 
 test('the banner library in the package is the unmodified npm release', () => {
