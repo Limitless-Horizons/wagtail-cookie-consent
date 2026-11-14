@@ -18,6 +18,7 @@ It doesn't block or load other scripts for you, and it doesn't delete cookies an
 - The choice is remembered for 182 days, in a cookie on the visitor's device.
 - A **Cookie settings** link reopens the choices, so a visitor can change or withdraw them at any time.
 - The choice is announced to the page when it's made, when it changes, and on each later page load.
+- A page of your own can [show and change the choice](#a-page-of-your-own).
 - The banner is kept out of preview views automatically (non-configurable).
 - Settings available under Settings → Cookie consent, per the table below.
 
@@ -130,6 +131,31 @@ The event is sent when the visitor chooses, when they change their choice, and o
 A stored choice is announced as soon as `{% cookie_consent %}` runs, and again once the banner has loaded. Add your listener before `{% cookie_consent %}` to hear it at the earliest, and make it safe to run more than once.
 
 [wagtail-google-tag](https://github.com/Limitless-Horizons/wagtail-google-tag) listens for this event and updates Google's Consent Mode with it. Put `{% google_tag %}` before `{% cookie_consent %}`.
+
+### A page of your own
+
+A page of your own can show the visitor's choice and change it, for example a page where visitors manage everything they've agreed to. Here, a site's consent page shows the cookie choice as one checkbox among its own:
+
+![A site's own consent management page, with checkboxes for its marketing email and visit tracking and for analytics cookies, and Allow everything, Withdraw everything and Save my choices buttons](https://raw.githubusercontent.com/Limitless-Horizons/wagtail-cookie-consent/main/docs/images/consent-page.jpg)
+
+The banner's script defines `window.wagtailCookieConsent` for that:
+
+```js
+const consent = window.wagtailCookieConsent;
+
+consent.categories; // The categories your site shows: ["analytics", "marketing"]
+consent.get(); // { analytics: true, marketing: false }, or null before a choice
+
+// Store a choice, as the banner would. Returns a promise.
+consent.set({ analytics: false, marketing: false });
+
+// Close the banner without a choice, on a page that asks in its own way.
+consent.hideBanner();
+```
+
+`set()` announces the choice with the same `wagtail-cookie-consent:change` event, so everything that acts on the banner's choice acts on this one too. A category you leave out of `set()` is refused.
+
+`window.wagtailCookieConsent` is there only when the banner is on. On such a page, give refusing the same prominence as agreeing, as the banner does.
 
 ### Colors
 

@@ -9,6 +9,17 @@
  * page load once one is stored. A stored choice is announced as soon as this
  * script runs, before the banner library has loaded, so that scripts waiting
  * for it (such as an analytics tag) hear it early.
+ *
+ * It also defines window.wagtailCookieConsent, for a page of your own that
+ * shows or changes the choice:
+ *
+ * - categories is the list of categories the site shows.
+ * - get() returns the stored choice, in the event's form, or null when the
+ *   visitor hasn't chosen.
+ * - set(choice) stores a choice as the banner would, announces it, and closes
+ *   the banner. It returns a promise.
+ * - hideBanner() closes the banner without a choice, for a page that asks in
+ *   its own way.
  */
 (() => {
   const configElement = document.getElementById(
@@ -98,9 +109,41 @@
     });
   });
 
+  // Resolved once the banner library is running.
+  let libraryStarted;
+  const library = new Promise((resolve) => {
+    libraryStarted = resolve;
+  });
+
+  window.wagtailCookieConsent = {
+    categories: config.categories.slice(),
+    get() {
+      const accepted = storedCategories();
+      if (!accepted) return null;
+      const choice = {};
+      config.categories.forEach((category) => {
+        choice[category] = accepted.includes(category);
+      });
+      return choice;
+    },
+    set(choice) {
+      const accepted = config.categories.filter(
+        (category) => choice && choice[category],
+      );
+      return library.then((cookieConsent) => {
+        // The library announces it through onConsent or onChange below.
+        cookieConsent.acceptCategory(accepted);
+        cookieConsent.hide();
+      });
+    },
+    hideBanner() {
+      return library.then((cookieConsent) => cookieConsent.hide());
+    },
+  };
+
   const run = () => {
     if (!window.CookieConsent) return;
-    window.CookieConsent.run({
+    const started = window.CookieConsent.run({
       hideFromBots: config.hideFromBots,
       revision: config.revision,
       categories,
@@ -130,6 +173,7 @@
         },
       },
     });
+    Promise.resolve(started).then(() => libraryStarted(window.CookieConsent));
   };
 
   // The library's script is deferred, so it's there by DOMContentLoaded.
