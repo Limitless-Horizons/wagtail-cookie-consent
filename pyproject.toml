@@ -1,6 +1,6 @@
 [project]
 name = "wagtail-cookie-consent"
-version = "0.2.0"
+version = "0.2.1"
 description = "A cookie consent banner for Wagtail, set up in the Wagtail admin."
 readme = "README.md"
 license = "BSD-3-Clause"
@@ -40,7 +40,7 @@ dependencies = [
 Homepage = "https://github.com/Limitless-Horizons/wagtail-cookie-consent"
 Repository = "https://github.com/Limitless-Horizons/wagtail-cookie-consent"
 Changelog = "https://github.com/Limitless-Horizons/wagtail-cookie-consent/blob/main/CHANGELOG.md"
-Documentation = "https://github.com/Limitless-Horizons/wagtail-cookie-consent/blob/main/README.md"
+Documentation = "https://github.com/Limitless-Horizons/wagtail-cookie-consent/blob/main/docs/README.md"
 Issues = "https://github.com/Limitless-Horizons/wagtail-cookie-consent/issues"
 # Add funding link if needed.
 # Funding = "https://github.com/Limitless-Horizons/wagtail-cookie-consent"

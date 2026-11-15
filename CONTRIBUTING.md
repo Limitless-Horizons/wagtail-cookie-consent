@@ -53,6 +53,10 @@ The `.gitignore` is an allowlist: it ignores everything at the top level of the 
 
 [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) ships inside the package, in `src/wagtail_cookie_consent/static/wagtail_cookie_consent/vendor/`. Its files are unmodified copies of the npm release pinned in `package.json`, and a test fails when they differ. To update it, change the version in `package.json`, run `npm install`, copy `cookieconsent.umd.js` and `cookieconsent.css` from `node_modules/vanilla-cookieconsent/dist/` into `vendor/`, update the version in `vendor/README.md`, and note the change in the CHANGELOG.
 
+## Writing documentation
+
+The README has the basics only. Everything else is in `docs/`, as a tutorial, how-to guides, reference and explanation, following the [Wagtail package guidelines](https://docs.wagtail.org/en/latest/packages/index.html). A change that a site's developer or editor would notice updates the page it belongs to; a new page is added to `docs/README.md`. Links from the README are full GitHub URLs, so they work on PyPI.
+
 ## Writing tests
 
 There is a simple test app in `tests/`. Write your test modules there alongside the existing files.
